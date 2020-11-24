@@ -1,4 +1,5 @@
 pub mod draw;
+pub mod font;
 
 use crate::{SCREEN_HEIGHT, SCREEN_WIDTH};
 

@@ -1,3 +1,4 @@
+use crate::util::circle::circle_collision;
 use crate::util::font::*;
 use crate::SCREEN_WIDTH;
 use rayon::prelude::*;
@@ -37,15 +38,7 @@ fn circle_main(frame: &mut [u8], cx: usize, cy: usize, radius: usize, colour: [u
 
 	for px in x_lo..x_hi {
 		for py in y_lo..y_hi {
-			let d_x = px as f32 - cx as f32;
-			let d_y = py as f32 - cy as f32;
-			let distance = ((d_x * d_x) + (d_y * d_y)).sqrt();
-			let should_draw = if outline <= 0.0 {
-				distance < radius as f32
-			} else {
-				distance < radius as f32 && distance > radius as f32 - outline
-			};
-			if should_draw {
+			if circle_collision(px, py, cx, cy, radius, outline) {
 				pixel(frame, px, py, colour);
 			}
 		}

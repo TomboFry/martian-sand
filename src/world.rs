@@ -1,7 +1,7 @@
 use crate::cell::Cell;
 use crate::element::Element;
 use crate::util::draw;
-use crate::{SCREEN_HEIGHT, SCREEN_WIDTH};
+use crate::{GUI_HEIGHT, SCREEN_HEIGHT, SCREEN_WIDTH};
 
 use rand::prelude::*;
 use std::time::Instant;
@@ -11,6 +11,9 @@ use winit_input_helper::WinitInputHelper;
 type Pixels = pixels::Pixels<winit::window::Window>;
 
 pub struct World {
+	world_width: usize,
+	world_height: usize,
+
 	// Cursor control
 	mouse_x: usize,
 	mouse_y: usize,
@@ -29,15 +32,17 @@ pub struct World {
 
 impl World {
 	pub fn new() -> World {
-		// Random cells
+		let world_height = SCREEN_HEIGHT - GUI_HEIGHT;
+
+		// Random cells (temporary)
 		let mut rng = thread_rng();
 		let cells = (0..1024)
 			.into_iter()
 			.map(|_| {
 				let colour = [rng.gen(), rng.gen(), rng.gen()];
 				let element = Element::new("Sand", colour);
-				let x = rng.gen_range(0, SCREEN_WIDTH);
-				let y = rng.gen_range(0, SCREEN_HEIGHT);
+				let x = rng.gen_range(1, SCREEN_WIDTH - 1);
+				let y = rng.gen_range(1, world_height);
 
 				Cell::new(element, x as usize, y as usize)
 			})
@@ -47,6 +52,8 @@ impl World {
 		let element = Element::new("Potato", colour);
 
 		World {
+			world_width: SCREEN_WIDTH as usize,
+			world_height: world_height as usize,
 			mouse_x: 0,
 			mouse_y: 0,
 			cursor_radius: 16,

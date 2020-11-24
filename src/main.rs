@@ -14,6 +14,7 @@ use util::draw;
 
 pub const SCREEN_WIDTH: u32 = 1280;
 pub const SCREEN_HEIGHT: u32 = 720;
+pub const GUI_HEIGHT: u32 = 128;
 
 fn main() -> Result<(), Error> {
 	let event_loop = EventLoop::new();

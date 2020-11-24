@@ -71,7 +71,7 @@ impl World {
 		}
 
 		let scroll = input.scroll_diff();
-		self.cursor_radius = (self.cursor_radius as f32 + scroll) as usize;
+		self.cursor_radius = (self.cursor_radius as f32 + (scroll * 2.0)) as usize;
 
 		input.mouse()
 			.map(|(mx, my)| {

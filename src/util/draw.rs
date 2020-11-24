@@ -1,5 +1,4 @@
 use crate::util::font::*;
-use crate::util::underflow;
 use crate::SCREEN_WIDTH;
 use rayon::prelude::*;
 
@@ -31,10 +30,10 @@ pub fn pixel(frame: &mut [u8], x: usize, y: usize, colour: [u8; 3]) {
 }
 
 fn circle_main(frame: &mut [u8], cx: usize, cy: usize, radius: usize, colour: [u8; 3], outline: f32) {
-	let x_lo = underflow(cx - radius);
-	let x_hi = underflow(cx + radius);
-	let y_lo = underflow(cy - radius);
-	let y_hi = underflow(cy + radius);
+	let x_lo = if radius > cx { 0 } else { cx - radius };
+	let x_hi = cx + radius;
+	let y_lo = if radius > cy { 0 } else { cy - radius };
+	let y_hi = cy + radius;
 
 	for px in x_lo..x_hi {
 		for py in y_lo..y_hi {

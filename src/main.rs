@@ -1,5 +1,8 @@
+mod cell;
 mod element;
 mod util;
+mod world;
+
 use pixels::{Error, Pixels, SurfaceTexture};
 use winit::dpi::LogicalSize;
 use winit::event::{Event, VirtualKeyCode};
@@ -29,6 +32,8 @@ fn main() -> Result<(), Error> {
 
 	// Create world and display for world
 	let mut pixels = Pixels::new(SCREEN_WIDTH, SCREEN_HEIGHT, surface_texture)?;
+	let mut world = world::World::new();
+
 	event_loop.run(move |event, _, control_flow| {
 		if let Event::RedrawRequested(_) = event {
 			// TODO: DRAW STUFF HERE

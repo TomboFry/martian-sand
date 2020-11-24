@@ -1,10 +1,13 @@
 mod element;
+mod util;
 use pixels::{Error, Pixels, SurfaceTexture};
 use winit::dpi::LogicalSize;
 use winit::event::{Event, VirtualKeyCode};
 use winit::event_loop::{ControlFlow, EventLoop};
 use winit::window::WindowBuilder;
 use winit_input_helper::WinitInputHelper;
+
+use util::draw;
 
 pub const SCREEN_WIDTH: u32 = 1280;
 pub const SCREEN_HEIGHT: u32 = 720;
@@ -29,6 +32,8 @@ fn main() -> Result<(), Error> {
 	event_loop.run(move |event, _, control_flow| {
 		if let Event::RedrawRequested(_) = event {
 			// TODO: DRAW STUFF HERE
+			let frame = pixels.get_frame();
+			draw::clear(frame);
 
 			if pixels
 				.render()

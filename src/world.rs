@@ -127,7 +127,7 @@ impl World {
 		let height = self.world_height;
 		let width = self.world_width;
 		self.cells
-			.retain(|cell| cell.x > 0 && cell.x < width - 1 && cell.y > 0 && cell.y < height);
+			.retain(|cell| cell.x > 0 && cell.x < width - 1 && cell.y > 0 && cell.y < height && cell.alive);
 	}
 
 	fn add_element(&mut self) {

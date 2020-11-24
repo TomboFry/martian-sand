@@ -76,12 +76,28 @@ impl World {
 			self.pause_toggle();
 		}
 
+		self.set_scroll(input);
+		self.set_mouse_position(pixels, input);
+		self.set_render_time();
 		if self.is_paused {
 			return;
 		}
 
+		// Update Grid
+	}
+
+	fn set_scroll(&mut self, input: &WinitInputHelper) {
 		let scroll = input.scroll_diff();
 		self.cursor_radius = (self.cursor_radius as f32 + (scroll * 2.0)) as usize;
+	}
+
+	fn set_mouse_position(&mut self, pixels: &Pixels, input: &WinitInputHelper) {
+		if input.mouse_pressed(0) {
+			self.is_drawing = true;
+		}
+		if input.mouse_released(0) {
+			self.is_drawing = false;
+		}
 
 		input.mouse()
 			.map(|(mx, my)| {
@@ -93,10 +109,9 @@ impl World {
 				self.mouse_y = my_p;
 			})
 			.unwrap_or_default();
+	}
 
-		// Update Grid
-
-		// Set render stats
+	fn set_render_time(&mut self) {
 		let now = Instant::now();
 		self.render_time = now.duration_since(self.last_render).as_millis() as usize;
 		self.last_render = Instant::now();

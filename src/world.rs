@@ -79,6 +79,8 @@ impl World {
 		self.set_scroll(input);
 		self.set_mouse_position(pixels, input);
 		self.set_render_time();
+		self.remove_out_of_bounds();
+
 		if self.is_paused {
 			return;
 		}
@@ -115,6 +117,13 @@ impl World {
 		let now = Instant::now();
 		self.render_time = now.duration_since(self.last_render).as_millis() as usize;
 		self.last_render = Instant::now();
+	}
+
+	fn remove_out_of_bounds(&mut self) {
+		let height = self.world_height;
+		let width = self.world_width;
+		self.cells
+			.retain(|cell| cell.x > 0 && cell.x < width - 1 && cell.y > 0 && cell.y < height);
 	}
 
 	pub fn draw(&mut self, screen: &mut [u8]) {

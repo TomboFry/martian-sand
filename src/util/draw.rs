@@ -83,10 +83,14 @@ fn letter(frame: &mut [u8], x: usize, y: usize, letter: u32, colour: [u8; 3]) {
 pub fn text(frame: &mut [u8], x: usize, y: usize, text: &str) {
 	text.chars()
 		.filter_map(|letter| {
-			if !letter.is_ascii() {
+			let code = letter as usize;
+			if code < 32 {
 				return None;
 			}
-			let index = (letter as usize) - 32;
+			let index = code - 32;
+			if index > 95 {
+				return None;
+			}
 			Some(FONT[index])
 		})
 		.enumerate()

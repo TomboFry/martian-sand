@@ -3,16 +3,20 @@ use crate::util::underflow;
 use crate::SCREEN_WIDTH;
 use rayon::prelude::*;
 
+/// Set every pixel on the screen to black. This task is parallelised
 pub fn clear(frame: &mut [u8]) {
 	frame.into_par_iter().for_each(|pixel| {
 		*pixel = 0x00;
 	});
 }
 
+/// Determine the index for any given point on the screen.
+/// This factors in the fact that each pixel uses 4 bytes for colour (rgba).
 fn get_index(x: usize, y: usize) -> usize {
 	(x + (y * SCREEN_WIDTH as usize)) * 4
 }
 
+/// Draw a single pixel, with a given colour, to the screen at a given point
 pub fn pixel(frame: &mut [u8], x: usize, y: usize, colour: [u8; 3]) {
 	let idx = get_index(x, y);
 
@@ -43,6 +47,7 @@ pub fn circle(frame: &mut [u8], cx: usize, cy: usize, radius: usize, colour: [u8
 		}
 	}
 }
+/// Draw a single letter to the screen based on the blit32 font
 fn letter(frame: &mut [u8], x: usize, y: usize, letter: u32, colour: [u8; 3]) {
 	for line_offset in 0..FONT_HEIGHT {
 		for letter_offset in 0..FONT_WIDTH {
@@ -57,6 +62,8 @@ fn letter(frame: &mut [u8], x: usize, y: usize, letter: u32, colour: [u8; 3]) {
 	}
 }
 
+/// Draw a string of text to the screen.
+/// This will ignore any characters outside of the range of valid characters.
 pub fn text(frame: &mut [u8], x: usize, y: usize, text: &str) {
 	text.chars()
 		.filter_map(|letter| {

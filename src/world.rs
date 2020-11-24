@@ -22,7 +22,7 @@ pub struct World {
 	pub elements: Vec<Element>,
 	pub is_drawing: bool,
 	pub is_paused: bool,
-	pub selected_element: Option<Element>,
+	pub selected_element: Option<usize>,
 	cells: Vec<Cell>,
 
 	// Misc
@@ -57,10 +57,10 @@ impl World {
 			mouse_x: 0,
 			mouse_y: 0,
 			cursor_radius: 16,
-			elements: vec![],
+			elements: vec![element],
 			is_drawing: false,
 			is_paused: false,
-			selected_element: Some(element),
+			selected_element: Some(0),
 			cells: cells,
 			last_render: Instant::now(),
 			render_time: 0,
@@ -124,7 +124,8 @@ impl World {
 		});
 
 		// Draw cursor
-		if let Some(element) = &self.selected_element {
+		if let Some(elm_index) = self.selected_element {
+			let element = &self.elements[elm_index];
 			draw::circle(screen, self.mouse_x, self.mouse_y, self.cursor_radius, element.colour);
 			draw::text(
 				screen,

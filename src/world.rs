@@ -101,6 +101,14 @@ impl World {
 		// Draw cursor
 		if let Some(element) = &self.selected_element {
 			draw::circle(screen, self.mouse_x, self.mouse_y, self.cursor_radius, element.colour);
+			draw::text(
+				screen,
+				self.mouse_x + self.cursor_radius,
+				self.mouse_y + self.cursor_radius,
+				&element.name,
+			);
 		}
+
+		draw::text(screen, 16, 16, &format!("{} ms", self.render_time));
 	}
 }

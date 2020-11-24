@@ -1,3 +1,4 @@
+use crate::util::font::*;
 use crate::util::underflow;
 use crate::SCREEN_WIDTH;
 use rayon::prelude::*;
@@ -41,4 +42,32 @@ pub fn circle(frame: &mut [u8], cx: usize, cy: usize, radius: usize, colour: [u8
 			}
 		}
 	}
+}
+fn letter(frame: &mut [u8], x: usize, y: usize, letter: u32, colour: [u8; 3]) {
+	for line_offset in 0..FONT_HEIGHT {
+		for letter_offset in 0..FONT_WIDTH {
+			let shift = (line_offset * FONT_WIDTH) + letter_offset;
+			// Shift the bits and mask everything but the smallest bit
+			// (essentially a boolean at this point)
+			let chr = (letter >> shift) & 0b00000001;
+			if chr == 1 {
+				pixel(frame, x + letter_offset as usize, y + line_offset as usize, colour);
+			}
+		}
+	}
+}
+
+pub fn text(frame: &mut [u8], x: usize, y: usize, text: &str) {
+	text.chars()
+		.filter_map(|letter| {
+			if !letter.is_ascii() {
+				return None;
+			}
+			let index = (letter as usize) - 32;
+			Some(FONT[index])
+		})
+		.enumerate()
+		.for_each(|(tx, index)| {
+			letter(frame, (tx * 8) + x, y, index, [0xff, 0xff, 0xff]);
+		});
 }

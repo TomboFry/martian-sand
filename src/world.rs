@@ -43,6 +43,9 @@ impl World {
 			})
 			.collect();
 
+		let colour = [rng.gen(), rng.gen(), rng.gen()];
+		let element = Element::new("Potato", colour);
+
 		World {
 			mouse_x: 0,
 			mouse_y: 0,
@@ -50,7 +53,7 @@ impl World {
 			elements: vec![],
 			is_drawing: false,
 			is_paused: false,
-			selected_element: None,
+			selected_element: Some(element),
 			cells: cells,
 			last_render: Instant::now(),
 			render_time: 0,

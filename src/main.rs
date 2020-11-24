@@ -36,9 +36,9 @@ fn main() -> Result<(), Error> {
 
 	event_loop.run(move |event, _, control_flow| {
 		if let Event::RedrawRequested(_) = event {
-			// TODO: DRAW STUFF HERE
 			let frame = pixels.get_frame();
 			draw::clear(frame);
+			world.draw(frame);
 
 			if pixels
 				.render()

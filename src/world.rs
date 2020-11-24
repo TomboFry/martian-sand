@@ -1,5 +1,6 @@
 use crate::cell::Cell;
 use crate::element::Element;
+use crate::util::draw;
 use crate::{SCREEN_HEIGHT, SCREEN_WIDTH};
 
 use rand::prelude::*;
@@ -89,5 +90,12 @@ impl World {
 		let now = Instant::now();
 		self.render_time = now.duration_since(self.last_render).as_millis() as usize;
 		self.last_render = Instant::now();
+	}
+
+	pub fn draw(&mut self, screen: &mut [u8]) {
+		// Draw each cell to screen
+		self.cells.iter().for_each(|cell: &Cell| {
+			draw::pixel(screen, cell.x, cell.y, cell.element.colour);
+		});
 	}
 }

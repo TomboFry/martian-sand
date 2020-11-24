@@ -1,9 +1,12 @@
 use crate::cell::Cell;
 use crate::element::Element;
+use crate::util::circle::circle_collision;
 use crate::util::draw;
 use crate::{GUI_HEIGHT, SCREEN_HEIGHT, SCREEN_WIDTH};
 
 use rand::prelude::*;
+use rayon::prelude::*;
+
 use std::time::Instant;
 use winit::event::VirtualKeyCode;
 use winit_input_helper::WinitInputHelper;
@@ -79,6 +82,7 @@ impl World {
 		self.set_scroll(input);
 		self.set_mouse_position(pixels, input);
 		self.set_render_time();
+		self.add_element();
 		self.remove_out_of_bounds();
 
 		if self.is_paused {
@@ -124,6 +128,47 @@ impl World {
 		let width = self.world_width;
 		self.cells
 			.retain(|cell| cell.x > 0 && cell.x < width - 1 && cell.y > 0 && cell.y < height);
+	}
+
+	fn add_element(&mut self) {
+		if self.is_drawing == false || self.selected_element.is_none() {
+			return;
+		}
+
+		let elm_index = self.selected_element.unwrap().clone();
+		let mx = self.mouse_x;
+		let my = self.mouse_y;
+		let rad = self.cursor_radius;
+
+		let x_lo = if rad > mx { 0 } else { mx - rad };
+		let x_hi = mx + rad;
+		let y_lo = if rad > my { 0 } else { my - rad };
+		let y_hi = my + rad;
+
+		let cells_in_box = self.cells_in_box(x_lo, y_lo, x_hi, y_hi).clone();
+		for px in x_lo..x_hi {
+			for py in y_lo..y_hi {
+				if !circle_collision(px, py, mx, my, self.cursor_radius, 0.0) {
+					continue;
+				}
+
+				let collision = cells_in_box.iter().find(|(x, y)| *x == px && *y == py).is_some();
+				if collision {
+					continue;
+				}
+
+				let element = self.elements[elm_index].clone();
+				self.cells.push(Cell::new(element, px, py))
+			}
+		}
+	}
+
+	fn cells_in_box(&mut self, x: usize, y: usize, x2: usize, y2: usize) -> Vec<(usize, usize)> {
+		self.cells
+			.par_iter()
+			.filter(|cell| cell.x > x && cell.y > y && cell.x < x2 && cell.y < y2)
+			.map(|cell| (cell.x, cell.y))
+			.collect()
 	}
 
 	pub fn draw(&mut self, screen: &mut [u8]) {

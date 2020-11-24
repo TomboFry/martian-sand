@@ -1,3 +1,4 @@
+#[derive(Clone)]
 pub struct Element {
 	pub name: String,
 	pub colour: [u8; 3],

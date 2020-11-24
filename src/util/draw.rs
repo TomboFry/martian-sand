@@ -30,7 +30,7 @@ pub fn pixel(frame: &mut [u8], x: usize, y: usize, colour: [u8; 3]) {
 	frame[idx + 3] = 0xff;
 }
 
-pub fn circle(frame: &mut [u8], cx: usize, cy: usize, radius: usize, colour: [u8; 3]) {
+fn circle_main(frame: &mut [u8], cx: usize, cy: usize, radius: usize, colour: [u8; 3], outline: f32) {
 	let x_lo = underflow(cx - radius);
 	let x_hi = underflow(cx + radius);
 	let y_lo = underflow(cy - radius);
@@ -41,12 +41,28 @@ pub fn circle(frame: &mut [u8], cx: usize, cy: usize, radius: usize, colour: [u8
 			let d_x = px as f32 - cx as f32;
 			let d_y = py as f32 - cy as f32;
 			let distance = ((d_x * d_x) + (d_y * d_y)).sqrt();
-			if distance < radius as f32 {
+			let should_draw = if outline <= 0.0 {
+				distance < radius as f32
+			} else {
+				distance < radius as f32 && distance > radius as f32 - outline
+			};
+			if should_draw {
 				pixel(frame, px, py, colour);
 			}
 		}
 	}
 }
+
+/// Draw a filled circle to the screen
+pub fn circle(frame: &mut [u8], cx: usize, cy: usize, radius: usize, colour: [u8; 3]) {
+	circle_main(frame, cx, cy, radius, colour, 0.0);
+}
+
+/// Draw an outlined circle with a given thickness
+pub fn circle_outline(frame: &mut [u8], cx: usize, cy: usize, radius: usize, colour: [u8; 3], thickness: f32) {
+	circle_main(frame, cx, cy, radius, colour, thickness);
+}
+
 /// Draw a single letter to the screen based on the blit32 font
 fn letter(frame: &mut [u8], x: usize, y: usize, letter: u32, colour: [u8; 3]) {
 	for line_offset in 0..FONT_HEIGHT {

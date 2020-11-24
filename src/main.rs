@@ -57,7 +57,7 @@ fn main() -> Result<(), Error> {
 				return;
 			}
 
-			// TODO: Update world here
+			world.update(&pixels, &input);
 			window.request_redraw();
 		}
 	});

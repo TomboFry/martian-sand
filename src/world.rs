@@ -145,5 +145,8 @@ impl World {
 		}
 
 		draw::text(screen, 16, 16, &format!("{} ms", self.render_time));
+		draw::text(screen, 16, 24, &format!("Cells: {}", self.cells.len()));
+		draw::text(screen, 16, 32, &format!("Paused: {}", self.is_paused));
+		draw::text(screen, 16, 40, &format!("Drawing: {}", self.is_drawing));
 	}
 }

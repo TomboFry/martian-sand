@@ -97,5 +97,10 @@ impl World {
 		self.cells.iter().for_each(|cell: &Cell| {
 			draw::pixel(screen, cell.x, cell.y, cell.element.colour);
 		});
+
+		// Draw cursor
+		if let Some(element) = &self.selected_element {
+			draw::circle(screen, self.mouse_x, self.mouse_y, self.cursor_radius, element.colour);
+		}
 	}
 }

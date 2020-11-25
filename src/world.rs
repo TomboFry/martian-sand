@@ -90,6 +90,7 @@ impl World {
 		}
 
 		// Update Grid
+		self.cells.iter_mut().for_each(|cell| cell.step());
 	}
 
 	fn set_scroll(&mut self, input: &WinitInputHelper) {
@@ -165,7 +166,7 @@ impl World {
 
 	fn cells_in_box(&mut self, x: usize, y: usize, x2: usize, y2: usize) -> Vec<(usize, usize)> {
 		self.cells
-			.par_iter()
+			.iter()
 			.filter(|cell| cell.x > x && cell.y > y && cell.x < x2 && cell.y < y2)
 			.map(|cell| (cell.x, cell.y))
 			.collect()

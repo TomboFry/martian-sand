@@ -2,7 +2,7 @@ use crate::cell::Cell;
 use crate::element::Element;
 use crate::util::circle::circle_collision;
 use crate::util::draw;
-use crate::{GUI_HEIGHT, SCREEN_HEIGHT, SCREEN_WIDTH};
+use crate::{PixelsInst, GUI_HEIGHT, SCREEN_HEIGHT, SCREEN_WIDTH};
 
 use rand::prelude::*;
 use rayon::prelude::*;
@@ -10,8 +10,6 @@ use rayon::prelude::*;
 use std::time::Instant;
 use winit::event::VirtualKeyCode;
 use winit_input_helper::WinitInputHelper;
-
-type Pixels = pixels::Pixels<winit::window::Window>;
 
 pub struct World {
 	world_width: usize,
@@ -74,7 +72,7 @@ impl World {
 		self.is_paused = !self.is_paused;
 	}
 
-	pub fn update(&mut self, pixels: &Pixels, input: &WinitInputHelper) {
+	pub fn update(&mut self, pixels: &PixelsInst, input: &WinitInputHelper) {
 		if input.key_pressed(VirtualKeyCode::P) {
 			self.pause_toggle();
 		}
@@ -98,7 +96,7 @@ impl World {
 		self.cursor_radius = (self.cursor_radius as f32 + (scroll * 2.0)) as usize;
 	}
 
-	fn set_mouse_position(&mut self, pixels: &Pixels, input: &WinitInputHelper) {
+	fn set_mouse_position(&mut self, pixels: &PixelsInst, input: &WinitInputHelper) {
 		if input.mouse_pressed(0) {
 			self.is_drawing = true;
 		}

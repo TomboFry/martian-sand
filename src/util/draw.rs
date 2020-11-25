@@ -90,3 +90,11 @@ pub fn text(frame: &mut [u8], x: usize, y: usize, text: &str) {
 			letter(frame, (tx * 6) + x, y, index, [0xff, 0xff, 0xff]);
 		});
 }
+
+pub fn rect(frame: &mut [u8], x1: usize, y1: usize, x2: usize, y2: usize, colour: [u8; 3]) {
+	for x in x1..x2 {
+		for y in y1..y2 {
+			pixel(frame, x, y, colour);
+		}
+	}
+}

@@ -189,6 +189,7 @@ impl World {
 			);
 		}
 
+		draw::rect(screen, 8, 8, 108, 56, [0x33, 0x33, 0x33]);
 		draw::text(screen, 16, 16, &format!("{} ms", self.render_time));
 		draw::text(screen, 16, 24, &format!("Cells: {}", self.cells.len()));
 		draw::text(screen, 16, 32, &format!("Paused: {}", self.is_paused));

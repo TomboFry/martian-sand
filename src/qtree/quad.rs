@@ -63,14 +63,14 @@ where
 		}
 	}
 
-	pub fn find(&self, x: usize, y: usize) -> Option<&T> {
+	pub fn find(&self, x: usize, y: usize) -> Option<&Node<T>> {
 		if !self.rect.contains(&Point { x, y }) {
 			return None;
 		}
 
 		let data = self.data.iter().find(|cell| cell.pos.x == x && cell.pos.y == y);
 		if data.is_some() {
-			return Some(&data.unwrap().data);
+			return data;
 		}
 
 		// Recurse over each quad until it is found

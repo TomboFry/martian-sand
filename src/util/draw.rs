@@ -87,7 +87,7 @@ pub fn text(frame: &mut [u8], x: usize, y: usize, text: &str) {
 		})
 		.enumerate()
 		.for_each(|(tx, index)| {
-			letter(frame, (tx * 6) + x, y, index, [0xff, 0xff, 0xff]);
+			letter(frame, (tx * FONT_SEPARATION) + x, y, index, [0xff, 0xff, 0xff]);
 		});
 }
 

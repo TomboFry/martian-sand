@@ -1,5 +1,7 @@
 use crate::cell::Cell;
 use crate::element::Element;
+use crate::qtree::node::Node;
+use crate::qtree::quad::QuadTree;
 use crate::util::circle::circle_collision;
 use crate::util::draw;
 use crate::{GUI_WIDTH, RGB, SCREEN_HEIGHT, SCREEN_WIDTH};
@@ -27,31 +29,21 @@ pub struct World {
 	pub is_paused: bool,
 	pub selected_element: Option<usize>,
 	cells: Vec<Cell>,
+	tree: QuadTree<Cell>,
 
 	// Misc
 	last_render: Instant,
 	render_time: usize,
+	rng: ThreadRng,
 }
 
 impl World {
 	pub fn new() -> World {
 		let world_width = (SCREEN_WIDTH - GUI_WIDTH) as usize;
 		let world_height = SCREEN_HEIGHT as usize;
+		let tree = QuadTree::new(0, 0, world_width, world_height, 500);
 
-		// Random cells (temporary)
 		let mut rng = thread_rng();
-		let cells = (0..1024)
-			.into_iter()
-			.map(|_| {
-				let colour = [rng.gen(), rng.gen(), rng.gen()];
-				let element = Element::new("Sand", colour);
-				let x = rng.gen_range(1, SCREEN_WIDTH - 1);
-				let y = rng.gen_range(1, world_height);
-
-				Cell::new(element, x as usize, y as usize)
-			})
-			.collect();
-
 		let colour: RGB = [rng.gen(), rng.gen(), rng.gen()];
 		let element = Element::new("Potato", colour);
 
@@ -69,9 +61,13 @@ impl World {
 			is_drawing: false,
 			is_paused: false,
 			selected_element: Some(0),
-			cells: cells,
+
+			cells: vec![],
+			tree,
+
 			last_render: Instant::now(),
 			render_time: 0,
+			rng,
 		}
 	}
 
@@ -89,6 +85,7 @@ impl World {
 		self.set_render_time();
 		self.add_element();
 		self.remove_out_of_bounds();
+		self.create_tree();
 
 		if self.is_paused {
 			return;
@@ -135,6 +132,20 @@ impl World {
 		self.last_render = Instant::now();
 	}
 
+	fn create_tree(&mut self) {
+		let mut tree = QuadTree::new(0, 0, self.world_width, self.world_height, 50);
+		self.cells.iter().for_each(|cell| {
+			let x = cell.x;
+			let y = cell.y;
+
+			// TODO: Cloning is slow, pass by reference
+			let node: Node<Cell> = Node::new(cell.clone(), x, y);
+
+			tree.insert(node);
+		});
+		self.tree = tree;
+	}
+
 	fn remove_out_of_bounds(&mut self) {
 		let height = self.world_height;
 		let width = self.world_width;
@@ -162,30 +173,21 @@ impl World {
 		let y_lo = if rad > my { 0 } else { my - rad };
 		let y_hi = my + rad;
 
-		let cells_in_box = self.cells_in_box(x_lo, y_lo, x_hi, y_hi).clone();
 		for px in x_lo..x_hi {
 			for py in y_lo..y_hi {
 				if !circle_collision(px, py, mx, my, self.cursor_radius, 0.0) {
 					continue;
 				}
 
-				let collision = cells_in_box.iter().find(|(x, y)| *x == px && *y == py).is_some();
+				let collision = self.tree.find(px, py).is_some();
 				if collision {
 					continue;
 				}
 
 				let element = self.elements[elm_index].clone();
-				self.cells.push(Cell::new(element, px, py))
+				self.cells.push(Cell::new(element, px, py, self.rng.gen()))
 			}
 		}
-	}
-
-	fn cells_in_box(&mut self, x: usize, y: usize, x2: usize, y2: usize) -> Vec<(usize, usize)> {
-		self.cells
-			.iter()
-			.filter(|cell| cell.x > x && cell.y > y && cell.x < x2 && cell.y < y2)
-			.map(|cell| (cell.x, cell.y))
-			.collect()
 	}
 
 	pub fn draw(&mut self, screen: &mut [u8]) {

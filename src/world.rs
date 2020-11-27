@@ -2,7 +2,7 @@ use crate::cell::Cell;
 use crate::element::Element;
 use crate::util::circle::circle_collision;
 use crate::util::draw;
-use crate::{GUI_HEIGHT, RGB, SCREEN_HEIGHT, SCREEN_WIDTH};
+use crate::{GUI_WIDTH, RGB, SCREEN_HEIGHT, SCREEN_WIDTH};
 
 use rand::prelude::*;
 use rayon::prelude::*;
@@ -35,7 +35,8 @@ pub struct World {
 
 impl World {
 	pub fn new() -> World {
-		let world_height = SCREEN_HEIGHT - GUI_HEIGHT;
+		let world_width = (SCREEN_WIDTH - GUI_WIDTH) as usize;
+		let world_height = SCREEN_HEIGHT as usize;
 
 		// Random cells (temporary)
 		let mut rng = thread_rng();
@@ -55,8 +56,9 @@ impl World {
 		let element = Element::new("Potato", colour);
 
 		World {
-			world_width: SCREEN_WIDTH as usize,
-			world_height: world_height as usize,
+			world_width,
+			world_height,
+
 			mouse_x: 0,
 			mouse_y: 0,
 			mouse_down_left: false,
@@ -137,7 +139,7 @@ impl World {
 		let height = self.world_height;
 		let width = self.world_width;
 		self.cells
-			.retain(|cell| cell.x > 0 && cell.x < width - 1 && cell.y > 0 && cell.y < height && cell.alive);
+			.retain(|cell| cell.x > 0 && cell.x < width - 1 && cell.y > 0 && cell.y < height - 1 && cell.alive);
 	}
 
 	fn add_element(&mut self) {
@@ -188,20 +190,22 @@ impl World {
 
 	pub fn draw(&mut self, screen: &mut [u8]) {
 		// Draw each cell to screen
-		self.cells.iter().for_each(|cell: &Cell| {
+		self.cells.iter().for_each(|cell| {
 			draw::pixel(screen, cell.x, cell.y, cell.element.colour);
 		});
 
 		// Draw cursor
-		if let Some(elm_index) = self.selected_element {
-			let element = &self.elements[elm_index];
-			draw::circle(screen, self.mouse_x, self.mouse_y, self.cursor_radius, element.colour);
-			draw::text(
-				screen,
-				self.mouse_x + self.cursor_radius,
-				self.mouse_y + self.cursor_radius,
-				&element.name,
-			);
+		if self.mouse_x < self.world_width && self.mouse_y < self.world_height {
+			if let Some(elm_index) = self.selected_element {
+				let element = &self.elements[elm_index];
+				draw::circle(screen, self.mouse_x, self.mouse_y, self.cursor_radius, element.colour);
+				draw::text(
+					screen,
+					self.mouse_x + self.cursor_radius,
+					self.mouse_y - self.cursor_radius,
+					&element.name,
+				);
+			}
 		}
 
 		draw::rect(screen, 8, 8, 108, 56, [0x33, 0x33, 0x33]);

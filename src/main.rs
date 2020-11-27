@@ -15,7 +15,7 @@ use util::draw;
 pub type RGB = [u8; 3];
 pub const SCREEN_WIDTH: u32 = 1280;
 pub const SCREEN_HEIGHT: u32 = 720;
-pub const GUI_HEIGHT: u32 = 128;
+pub const GUI_WIDTH: u32 = 128;
 
 fn main() -> Result<(), Error> {
 	let event_loop = EventLoop::new();

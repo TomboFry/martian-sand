@@ -1,9 +1,10 @@
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Point {
 	pub x: usize,
 	pub y: usize,
 }
 
+#[derive(Debug)]
 pub struct Rect {
 	pub x1: usize,
 	pub y1: usize,

@@ -85,13 +85,13 @@ impl World {
 		self.set_render_time();
 		self.add_element();
 		self.remove_out_of_bounds();
-		self.create_tree();
 
 		if self.is_paused {
 			return;
 		}
 
 		// Update Grid
+		self.create_tree();
 		self.cells.iter_mut().for_each(|cell| cell.step());
 	}
 
@@ -185,7 +185,9 @@ impl World {
 				}
 
 				let element = self.elements[elm_index].clone();
-				self.cells.push(Cell::new(element, px, py, self.rng.gen()))
+				let cell = Cell::new(element, px, py, self.rng.gen());
+				self.tree.insert(Node::new(cell.clone(), px, py));
+				self.cells.push(cell);
 			}
 		}
 	}

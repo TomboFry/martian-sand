@@ -100,7 +100,7 @@ impl World {
 
 	fn set_scroll(&mut self, input: &WinitInputHelper) {
 		let scroll = input.scroll_diff();
-		self.cursor_radius = (self.cursor_radius as f32 + (scroll * 2.0)) as usize;
+		self.cursor_radius = (self.cursor_radius as f32 + (scroll * 2.0)).clamp(1.0, 32.0) as usize;
 	}
 
 	fn set_mouse_position(&mut self, input: &WinitInputHelper) {

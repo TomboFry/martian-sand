@@ -7,12 +7,11 @@ use pixels::{Error, Pixels, SurfaceTexture};
 use winit::dpi::LogicalSize;
 use winit::event::{Event, VirtualKeyCode};
 use winit::event_loop::{ControlFlow, EventLoop};
-use winit::window::{Window, WindowBuilder};
+use winit::window::WindowBuilder;
 use winit_input_helper::WinitInputHelper;
 
 use util::draw;
 
-pub type PixelsInst = Pixels<Window>;
 pub const SCREEN_WIDTH: u32 = 1280;
 pub const SCREEN_HEIGHT: u32 = 720;
 pub const GUI_HEIGHT: u32 = 128;
@@ -59,7 +58,7 @@ fn main() -> Result<(), Error> {
 				return;
 			}
 
-			world.update(&pixels, &input);
+			world.update(&input);
 			window.request_redraw();
 		}
 	});

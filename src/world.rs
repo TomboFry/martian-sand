@@ -2,7 +2,7 @@ use crate::cell::Cell;
 use crate::element::Element;
 use crate::util::circle::circle_collision;
 use crate::util::draw;
-use crate::{PixelsInst, GUI_HEIGHT, SCREEN_HEIGHT, SCREEN_WIDTH};
+use crate::{GUI_HEIGHT, SCREEN_HEIGHT, SCREEN_WIDTH};
 
 use rand::prelude::*;
 use rayon::prelude::*;
@@ -18,6 +18,8 @@ pub struct World {
 	// Cursor control
 	mouse_x: usize,
 	mouse_y: usize,
+	mouse_down_left: bool,
+	mouse_down_right: bool,
 	cursor_radius: usize,
 
 	pub elements: Vec<Element>,
@@ -57,6 +59,9 @@ impl World {
 			world_height: world_height as usize,
 			mouse_x: 0,
 			mouse_y: 0,
+			mouse_down_left: false,
+			mouse_down_right: false,
+
 			cursor_radius: 16,
 			elements: vec![element],
 			is_drawing: false,
@@ -72,13 +77,13 @@ impl World {
 		self.is_paused = !self.is_paused;
 	}
 
-	pub fn update(&mut self, pixels: &PixelsInst, input: &WinitInputHelper) {
+	pub fn update(&mut self, input: &WinitInputHelper) {
 		if input.key_pressed(VirtualKeyCode::P) {
 			self.pause_toggle();
 		}
 
 		self.set_scroll(input);
-		self.set_mouse_position(pixels, input);
+		self.set_mouse_position(input);
 		self.set_render_time();
 		self.add_element();
 		self.remove_out_of_bounds();
@@ -96,22 +101,28 @@ impl World {
 		self.cursor_radius = (self.cursor_radius as f32 + (scroll * 2.0)) as usize;
 	}
 
-	fn set_mouse_position(&mut self, pixels: &PixelsInst, input: &WinitInputHelper) {
+	fn set_mouse_position(&mut self, input: &WinitInputHelper) {
+		// Set left click
 		if input.mouse_pressed(0) {
-			self.is_drawing = true;
+			self.mouse_down_left = true;
 		}
 		if input.mouse_released(0) {
-			self.is_drawing = false;
+			self.mouse_down_left = false;
 		}
 
-		input.mouse()
-			.map(|(mx, my)| {
-				let (mx_p, my_p) = pixels
-					.window_pos_to_pixel((mx, my))
-					.unwrap_or_else(|pos| pixels.clamp_pixel_pos(pos));
+		// Set right click
+		if input.mouse_pressed(1) {
+			self.mouse_down_right = true;
+		}
+		if input.mouse_released(1) {
+			self.mouse_down_right = false;
+		}
 
-				self.mouse_x = mx_p;
-				self.mouse_y = my_p;
+		input
+			.mouse()
+			.map(|(mx, my)| {
+				self.mouse_x = mx.clamp(0.0, SCREEN_WIDTH as f32) as usize;
+				self.mouse_y = my.clamp(0.0, SCREEN_HEIGHT as f32) as usize;
 			})
 			.unwrap_or_default();
 	}
@@ -130,6 +141,11 @@ impl World {
 	}
 
 	fn add_element(&mut self) {
+		self.is_drawing = false;
+		if self.mouse_down_left {
+			self.is_drawing = true;
+		}
+
 		if self.is_drawing == false || self.selected_element.is_none() {
 			return;
 		}

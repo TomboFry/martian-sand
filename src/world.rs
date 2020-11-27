@@ -208,6 +208,16 @@ impl World {
 			}
 		}
 
+		// UI Border
+		draw::rect(
+			screen,
+			self.world_width,
+			0,
+			self.world_width + 2,
+			self.world_height,
+			[0x99, 0x99, 0x99],
+		);
+
 		draw::rect(screen, 8, 8, 108, 56, [0x33, 0x33, 0x33]);
 		draw::text(screen, 16, 16, &format!("{} ms", self.render_time));
 		draw::text(screen, 16, 24, &format!("Cells: {}", self.cells.len()));

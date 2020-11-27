@@ -1,6 +1,6 @@
 use crate::qtree::space::Point;
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct Node<T>
 where
 	T: Clone,

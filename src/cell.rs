@@ -1,6 +1,6 @@
 use crate::element::Element;
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct Cell {
 	pub element: Element,
 	pub x: usize,

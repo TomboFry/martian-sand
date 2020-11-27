@@ -1,7 +1,6 @@
 use crate::qtree::node::Node;
 use crate::qtree::space::{Point, Rect};
 
-#[derive(Debug)]
 pub struct QuadTree<T>
 where
 	T: Clone,

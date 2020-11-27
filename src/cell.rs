@@ -1,28 +1,29 @@
 use crate::element::Element;
-use rand::prelude::*;
 
+#[derive(Clone, Debug)]
 pub struct Cell {
 	pub element: Element,
 	pub x: usize,
 	pub y: usize,
 	pub alive: bool,
-	rng: ThreadRng,
+	seed: u64,
 }
 
 impl Cell {
-	pub fn new(element: Element, x: usize, y: usize) -> Cell {
+	pub fn new(element: Element, x: usize, y: usize, seed: u64) -> Cell {
 		Cell {
 			element,
 			x,
 			y,
 			alive: true,
-			rng: thread_rng(),
+			seed,
 		}
 	}
 
 	pub fn step(&mut self) {
-		let rng = self.rng.gen::<u8>();
-		if rng > 250 {
+		self.seed = self.seed.rotate_left(1);
+
+		if self.seed & 0xff > 192 {
 			self.alive = false;
 		}
 	}

@@ -12,6 +12,7 @@ use winit_input_helper::WinitInputHelper;
 
 use util::draw;
 
+pub type RGB = [u8; 3];
 pub const SCREEN_WIDTH: u32 = 1280;
 pub const SCREEN_HEIGHT: u32 = 720;
 pub const GUI_HEIGHT: u32 = 128;

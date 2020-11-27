@@ -1,6 +1,6 @@
 use crate::util::circle::circle_collision;
 use crate::util::font::*;
-use crate::SCREEN_WIDTH;
+use crate::{RGB, SCREEN_WIDTH};
 use rayon::prelude::*;
 
 /// Set every pixel on the screen to black. This task is parallelised
@@ -17,7 +17,7 @@ fn get_index(x: usize, y: usize) -> usize {
 }
 
 /// Draw a single pixel, with a given colour, to the screen at a given point
-pub fn pixel(frame: &mut [u8], x: usize, y: usize, colour: [u8; 3]) {
+pub fn pixel(frame: &mut [u8], x: usize, y: usize, colour: RGB) {
 	let idx = get_index(x, y);
 
 	if idx >= frame.len() {
@@ -30,7 +30,7 @@ pub fn pixel(frame: &mut [u8], x: usize, y: usize, colour: [u8; 3]) {
 	frame[idx + 3] = 0xff;
 }
 
-fn circle_main(frame: &mut [u8], cx: usize, cy: usize, radius: usize, colour: [u8; 3], outline: f32) {
+fn circle_main(frame: &mut [u8], cx: usize, cy: usize, radius: usize, colour: RGB, outline: f32) {
 	let x_lo = if radius > cx { 0 } else { cx - radius };
 	let x_hi = cx + radius;
 	let y_lo = if radius > cy { 0 } else { cy - radius };
@@ -46,17 +46,17 @@ fn circle_main(frame: &mut [u8], cx: usize, cy: usize, radius: usize, colour: [u
 }
 
 /// Draw a filled circle to the screen
-pub fn circle(frame: &mut [u8], cx: usize, cy: usize, radius: usize, colour: [u8; 3]) {
+pub fn circle(frame: &mut [u8], cx: usize, cy: usize, radius: usize, colour: RGB) {
 	circle_main(frame, cx, cy, radius, colour, 0.0);
 }
 
 /// Draw an outlined circle with a given thickness
-pub fn circle_outline(frame: &mut [u8], cx: usize, cy: usize, radius: usize, colour: [u8; 3], thickness: f32) {
+pub fn circle_outline(frame: &mut [u8], cx: usize, cy: usize, radius: usize, colour: RGB, thickness: f32) {
 	circle_main(frame, cx, cy, radius, colour, thickness);
 }
 
 /// Draw a single letter to the screen based on the blit32 font
-fn letter(frame: &mut [u8], x: usize, y: usize, letter: u32, colour: [u8; 3]) {
+fn letter(frame: &mut [u8], x: usize, y: usize, letter: u32, colour: RGB) {
 	for line_offset in 0..FONT_HEIGHT {
 		for letter_offset in 0..FONT_WIDTH {
 			let shift = (line_offset * FONT_WIDTH) + letter_offset;
@@ -91,7 +91,7 @@ pub fn text(frame: &mut [u8], x: usize, y: usize, text: &str) {
 		});
 }
 
-pub fn rect(frame: &mut [u8], x1: usize, y1: usize, x2: usize, y2: usize, colour: [u8; 3]) {
+pub fn rect(frame: &mut [u8], x1: usize, y1: usize, x2: usize, y2: usize, colour: RGB) {
 	for x in x1..x2 {
 		for y in y1..y2 {
 			pixel(frame, x, y, colour);

@@ -2,7 +2,7 @@ use crate::cell::Cell;
 use crate::element::Element;
 use crate::util::circle::circle_collision;
 use crate::util::draw;
-use crate::{GUI_HEIGHT, SCREEN_HEIGHT, SCREEN_WIDTH};
+use crate::{GUI_HEIGHT, RGB, SCREEN_HEIGHT, SCREEN_WIDTH};
 
 use rand::prelude::*;
 use rayon::prelude::*;
@@ -51,7 +51,7 @@ impl World {
 			})
 			.collect();
 
-		let colour = [rng.gen(), rng.gen(), rng.gen()];
+		let colour: RGB = [rng.gen(), rng.gen(), rng.gen()];
 		let element = Element::new("Potato", colour);
 
 		World {

@@ -51,7 +51,7 @@ pub fn circle(frame: &mut [u8], cx: usize, cy: usize, radius: usize, colour: RGB
 }
 
 /// Draw an outlined circle with a given thickness
-pub fn circle_outline(frame: &mut [u8], cx: usize, cy: usize, radius: usize, colour: RGB, thickness: f32) {
+fn _circle_outline(frame: &mut [u8], cx: usize, cy: usize, radius: usize, colour: RGB, thickness: f32) {
 	circle_main(frame, cx, cy, radius, colour, thickness);
 }
 

@@ -7,6 +7,7 @@ pub struct Cell {
 	pub y: usize,
 	pub alive: bool,
 	seed: u64,
+	duration: usize,
 }
 
 impl Cell {
@@ -17,13 +18,19 @@ impl Cell {
 			y,
 			alive: true,
 			seed,
+			duration: 0,
 		}
 	}
 
 	pub fn step(&mut self) {
+		self.duration += 1;
 		self.seed = self.seed.rotate_left(1);
 
 		if self.seed & 0xff > 192 {
+			self.alive = false;
+		}
+
+		if self.duration > 1024 {
 			self.alive = false;
 		}
 	}

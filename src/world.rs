@@ -29,7 +29,7 @@ pub struct World {
 	pub is_paused: bool,
 	pub selected_element: Option<usize>,
 	cells: Vec<Cell>,
-	tree: QuadTree<Cell>,
+	tree: QuadTree<usize>,
 
 	// Misc
 	last_render: Instant,
@@ -133,16 +133,18 @@ impl World {
 	}
 
 	fn create_tree(&mut self) {
-		let mut tree = QuadTree::new(0, 0, self.world_width, self.world_height, 50);
-		self.cells.iter().for_each(|cell| {
+		let mut tree = QuadTree::new(0, 0, self.world_width, self.world_height, 100);
+
+		// TODO: Make faster?
+		self.cells.iter().enumerate().for_each(|(index, cell)| {
 			let x = cell.x;
 			let y = cell.y;
 
-			// TODO: Cloning is slow, pass by reference
-			let node: Node<Cell> = Node::new(cell.clone(), x, y);
+			let node = Node::new(index, x, y);
 
 			tree.insert(node);
 		});
+
 		self.tree = tree;
 	}
 
@@ -186,8 +188,11 @@ impl World {
 
 				let element = self.elements[elm_index].clone();
 				let cell = Cell::new(element, px, py, self.rng.gen());
-				self.tree.insert(Node::new(cell.clone(), px, py));
 				self.cells.push(cell);
+
+				// Insert new cell into quadtree
+				let index = self.cells.len();
+				self.tree.insert(Node::new(index, px, py));
 			}
 		}
 	}

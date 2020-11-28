@@ -92,7 +92,7 @@ impl World {
 
 		// Update Grid
 		self.create_tree();
-		self.cells.iter_mut().for_each(|cell| cell.step());
+		self.cells.par_iter_mut().for_each(|cell| cell.step());
 	}
 
 	fn set_scroll(&mut self, input: &WinitInputHelper) {
@@ -129,7 +129,7 @@ impl World {
 	fn set_render_time(&mut self) {
 		let now = Instant::now();
 		self.render_time = now.duration_since(self.last_render).as_millis() as usize;
-		self.last_render = Instant::now();
+		self.last_render = now;
 	}
 
 	fn create_tree(&mut self) {

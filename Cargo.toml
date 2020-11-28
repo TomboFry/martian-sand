@@ -12,3 +12,7 @@ winit = "0.23.0"
 winit_input_helper = "0.8.0"
 rand = "0.7.3"
 rayon = "1.5.0"
+
+[profile.release]
+lto = "fat"
+panic = "abort"

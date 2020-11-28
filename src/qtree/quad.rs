@@ -21,8 +21,8 @@ where
 		QuadTree {
 			rect,
 			capacity,
-			data: vec![],
-			quads: vec![],
+			data: Vec::with_capacity(capacity),
+			quads: Vec::with_capacity(4),
 		}
 	}
 

@@ -62,7 +62,7 @@ impl World {
 			is_paused: false,
 			selected_element: Some(0),
 
-			cells: vec![],
+			cells: Vec::with_capacity(world_width * world_height),
 			tree,
 
 			last_render: Instant::now(),

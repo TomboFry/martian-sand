@@ -33,7 +33,7 @@ pub struct World {
 
 	// Misc
 	last_render: Instant,
-	render_time: usize,
+	render_time: f32,
 	rng: ThreadRng,
 }
 
@@ -66,7 +66,7 @@ impl World {
 			tree,
 
 			last_render: Instant::now(),
-			render_time: 0,
+			render_time: 1.0,
 			rng,
 		}
 	}
@@ -128,7 +128,7 @@ impl World {
 
 	fn set_render_time(&mut self) {
 		let now = Instant::now();
-		self.render_time = now.duration_since(self.last_render).as_millis() as usize;
+		self.render_time = now.duration_since(self.last_render).as_secs_f32() * 1000.0;
 		self.last_render = now;
 	}
 
@@ -222,7 +222,7 @@ impl World {
 			screen,
 			self.world_width,
 			0,
-			self.world_width + 2,
+			self.world_width + 1,
 			self.world_height,
 			[0x99, 0x99, 0x99],
 		);
@@ -237,7 +237,16 @@ impl World {
 			y_off + 40,
 			[0x33, 0x33, 0x33],
 		);
-		draw::text(screen, x_off, y_off, &format!("{} ms", self.render_time));
+		draw::text(
+			screen,
+			x_off,
+			y_off,
+			&format!(
+				"{} ms ({} fps)",
+				self.render_time.trunc(),
+				(1000.0 / self.render_time as f32).trunc()
+			),
+		);
 		draw::text(screen, x_off, y_off + 8, &format!("Cells: {}", self.cells.len()));
 		draw::text(screen, x_off, y_off + 16, &format!("Paused: {}", self.is_paused));
 		draw::text(screen, x_off, y_off + 24, &format!("Drawing: {}", self.is_drawing));

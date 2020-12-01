@@ -1,5 +1,5 @@
 use crate::qtree::node::Node;
-use crate::qtree::space::{Point, Rect};
+use crate::qtree::space::Rect;
 
 pub struct QuadTree<T>
 where
@@ -45,7 +45,7 @@ where
 	}
 
 	pub fn insert(&mut self, node: Node<T>) {
-		if self.rect.contains(&node.pos) == false {
+		if self.rect.contains(node.x, node.y) == false {
 			return;
 		}
 
@@ -64,11 +64,11 @@ where
 	}
 
 	pub fn find(&self, x: usize, y: usize) -> Option<&Node<T>> {
-		if !self.rect.contains(&Point { x, y }) {
+		if !self.rect.contains(x, y) {
 			return None;
 		}
 
-		let data = self.data.iter().find(|cell| cell.pos.x == x && cell.pos.y == y);
+		let data = self.data.iter().find(|cell| cell.x == x && cell.y == y);
 		if data.is_some() {
 			return data;
 		}

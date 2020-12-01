@@ -1,11 +1,10 @@
-use crate::qtree::space::Point;
-
 #[derive(Clone)]
 pub struct Node<T>
 where
 	T: Clone,
 {
-	pub pos: Point,
+	pub x: usize,
+	pub y: usize,
 	pub data: T,
 }
 
@@ -14,9 +13,6 @@ where
 	T: Clone,
 {
 	pub fn new(data: T, x: usize, y: usize) -> Node<T> {
-		Node {
-			pos: Point { x, y },
-			data,
-		}
+		Node { x, y, data }
 	}
 }

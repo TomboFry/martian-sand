@@ -1,9 +1,3 @@
-#[derive(Clone)]
-pub struct Point {
-	pub x: usize,
-	pub y: usize,
-}
-
 pub struct Rect {
 	pub x1: usize,
 	pub y1: usize,
@@ -12,7 +6,7 @@ pub struct Rect {
 }
 
 impl Rect {
-	pub fn contains(&self, point: &Point) -> bool {
-		point.x >= self.x1 && point.x < self.x2 && point.y >= self.y1 && point.y < self.y2
+	pub fn contains(&self, x: usize, y: usize) -> bool {
+		x >= self.x1 && x < self.x2 && y >= self.y1 && y < self.y2
 	}
 }

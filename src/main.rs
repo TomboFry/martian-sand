@@ -14,8 +14,9 @@ use winit_input_helper::WinitInputHelper;
 use util::draw;
 
 pub type RGB = [u8; 3];
-pub const SCREEN_WIDTH: u32 = 1280;
-pub const SCREEN_HEIGHT: u32 = 720;
+pub const SCREEN_WIDTH: u32 = 640;
+pub const SCREEN_HEIGHT: u32 = 360;
+pub const SCREEN_SCALE: u32 = 3;
 pub const GUI_WIDTH: u32 = 128;
 
 fn main() -> Result<(), Error> {
@@ -23,7 +24,7 @@ fn main() -> Result<(), Error> {
 	let mut input = WinitInputHelper::new();
 
 	// Create Window
-	let size = LogicalSize::new(SCREEN_WIDTH, SCREEN_HEIGHT);
+	let size = LogicalSize::new(SCREEN_WIDTH * SCREEN_SCALE, SCREEN_HEIGHT * SCREEN_SCALE);
 	let window = WindowBuilder::new()
 		.with_inner_size(size)
 		.with_title("Martian Sand")

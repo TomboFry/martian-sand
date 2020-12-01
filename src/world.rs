@@ -4,7 +4,7 @@ use crate::qtree::node::Node;
 use crate::qtree::quad::QuadTree;
 use crate::util::circle::circle_collision;
 use crate::util::draw;
-use crate::{GUI_WIDTH, RGB, SCREEN_HEIGHT, SCREEN_WIDTH};
+use crate::{GUI_WIDTH, RGB, SCREEN_HEIGHT, SCREEN_SCALE, SCREEN_WIDTH};
 
 use rand::prelude::*;
 use rayon::prelude::*;
@@ -120,8 +120,8 @@ impl World {
 		input
 			.mouse()
 			.map(|(mx, my)| {
-				self.mouse_x = mx.clamp(0.0, SCREEN_WIDTH as f32) as usize;
-				self.mouse_y = my.clamp(0.0, SCREEN_HEIGHT as f32) as usize;
+				self.mouse_x = (mx.clamp(0.0, (SCREEN_WIDTH * SCREEN_SCALE) as f32) / SCREEN_SCALE as f32) as usize;
+				self.mouse_y = (my.clamp(0.0, (SCREEN_HEIGHT * SCREEN_SCALE) as f32) / SCREEN_SCALE as f32) as usize;
 			})
 			.unwrap_or_default();
 	}
@@ -227,10 +227,19 @@ impl World {
 			[0x99, 0x99, 0x99],
 		);
 
-		draw::rect(screen, 8, 8, 108, 56, [0x33, 0x33, 0x33]);
-		draw::text(screen, 16, 16, &format!("{} ms", self.render_time));
-		draw::text(screen, 16, 24, &format!("Cells: {}", self.cells.len()));
-		draw::text(screen, 16, 32, &format!("Paused: {}", self.is_paused));
-		draw::text(screen, 16, 40, &format!("Drawing: {}", self.is_drawing));
+		let x_off = (SCREEN_WIDTH - GUI_WIDTH + 16) as usize;
+		let y_off = (SCREEN_HEIGHT - 48) as usize;
+		draw::rect(
+			screen,
+			x_off - 8,
+			y_off - 8,
+			x_off + 100,
+			y_off + 40,
+			[0x33, 0x33, 0x33],
+		);
+		draw::text(screen, x_off, y_off, &format!("{} ms", self.render_time));
+		draw::text(screen, x_off, y_off + 8, &format!("Cells: {}", self.cells.len()));
+		draw::text(screen, x_off, y_off + 16, &format!("Paused: {}", self.is_paused));
+		draw::text(screen, x_off, y_off + 24, &format!("Drawing: {}", self.is_drawing));
 	}
 }

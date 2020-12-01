@@ -20,8 +20,6 @@ Tomorrow, I would like to be able to draw cells/elements to the screen, and mayb
 
 The following day, I plan on researching fluid mechanics a little closer, so I can figure out how on earth the cells are going to interact with each other. That, and re-learning Rust are the two main reasons for this endeavour.
 
-Last commit of the day: 5a792cd
-
 ## Day 2
 
 ![](./ms-day2.png)
@@ -36,4 +34,12 @@ My second goal for the day was to be able to add cells to the world, and this wa
 
 At first, this became incredibly slow as more cells were added, as it was checking every single cell previously added to make sure it did not collide. My first thought was to parallelise the search, as it's _incredibly_ easy to do so in Rust. The outcome was a slight performance increase, however I realised it could be optimised further. Instead of checking every single cell, it first determines whether a given pixel is colliding with the circle. If not, move to the next pixel. Assuming that pixel _is_ within the circle, it collects each cell's position within the square bounding box of the circle, which is done is parallel, and _then_ we search each cell within that box. This means it's checking a number of cells at least one magnitude smaller than before, so for the most part a solid 16ms render time is still achievable. I do wonder if this is able to be further optimised, or if an entirely different approach is needed to make it faster.
 
-Last commit of the day: 50c0422
+## Day 3
+
+When I previously wondered if there was a way to make the cell checking even faster, I discovered the solution would be to create a quadtree.
+
+A quadtree is a branching structure that even splits coordinates into four quadrants when there is a need to subdivide. Each quadrant has a limited capacity before subdividing itself into a further four quadrants, and it means that to find a particle at a particular location, the number of searches goes down from `O(n)` to `O(log n)`. For example, in a 640x640 grid, to find any one particle takes at most 9 searches, as opposed to the potentially 409,600 searches required if looping through all of them. This is an _incredible_ speed boost.
+
+I have written my own implementation of a quadtree after learning some theory from the internet. There are still some speed improvements to be made, but overall it's pretty speedy. The slowest part of the system now is generating the quadtree every frame so that collisions can be detected every frame. The true solution would be to contain all the particles directly within the quadtree as opposed to re-generating it every frame based on an array of them (completely defeating the purpose of _not_ looping through millions of particles), however I don't know how to move particles once they are in a quadrant (eg. what happens when a quadrant needs to be split, or any given particle needs to move from one to another? I don't know how to accomplish that with my limited knowledge).
+
+There are no visual changes for this progress, so no screenshot has been provided.

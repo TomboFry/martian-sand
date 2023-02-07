@@ -39,9 +39,11 @@ fn main() -> Result<(), Error> {
 	let mut pixels = Pixels::new(SCREEN_WIDTH, SCREEN_HEIGHT, surface_texture)?;
 	let mut world = world::World::new();
 
+	pixels.resize_surface(SCREEN_WIDTH * SCREEN_SCALE, SCREEN_HEIGHT * SCREEN_SCALE)?;
+
 	event_loop.run(move |event, _, control_flow| {
 		if let Event::RedrawRequested(_) = event {
-			let frame = pixels.get_frame();
+			let frame = pixels.get_frame_mut();
 			draw::clear(frame);
 			world.draw(frame);
 

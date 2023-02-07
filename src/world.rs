@@ -125,7 +125,7 @@ impl World {
 
 			for interaction in inter {
 				if elm_index == interaction.with {
-					let chance = self.rng.gen_range(0.0, 1.0);
+					let chance = self.rng.gen_range(0.0..1.0);
 					if chance < interaction.chance {
 						cell.change_element(&self.elements[interaction.into], interaction.into);
 					}

@@ -94,14 +94,14 @@ impl Element {
 	}
 
 	pub fn random(index: usize, rng: &mut ThreadRng) -> Element {
-		let max_duration = rng.gen_range(0, 512);
+		let max_duration = rng.gen_range(0..512);
 		Element {
 			name: format!("Elm {}", index),
 			colour: [rng.gen(), rng.gen(), rng.gen()],
-			density: rng.gen_range(-0.5, 1.0),
-			viscosity: rng.gen_range(0.1, 1.0),
+			density: rng.gen_range(-0.5..1.0),
+			viscosity: rng.gen_range(0.1..1.0),
 			max_duration: if max_duration > 128 { Some(max_duration) } else { None },
-			temperature: (rng.gen_range(-10.0, 100.0) as f32).clamp(0.0, 100.0),
+			temperature: (rng.gen_range(-10.0..100.0) as f32).clamp(0.0, 100.0),
 			temperature_delta: 0.0,
 			interactions: vec![],
 			drawable: true,

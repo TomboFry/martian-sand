@@ -1,0 +1,568 @@
+[
+	{
+		"name": "Fire",
+		"colour": [ 255, 128, 0 ],
+		"max_duration": 15,
+		"density": -5,
+		"viscosity": 0.9,
+		"temperature": 30,
+		"temperature_delta": 2,
+		"interactions": []
+	},
+	{
+		"name": "Metal",
+		"colour": [ 192, 192, 192 ],
+		"density": 1,
+		"viscosity": 1,
+		"temperature": 10,
+		"interactions": [
+			{
+				"with": "Rust",
+				"into": "Rust",
+				"chance": 0.01
+			},
+			{
+				"with": "Water",
+				"into": "Rust",
+				"chance": 0.1
+			},
+			{
+				"with": "Saltwater",
+				"into": "Rust",
+				"chance": 0.05
+			},
+			{
+				"with": "Steam",
+				"into": "Rust",
+				"chance": 0.3
+			},
+			{
+				"with": "Nitro Burning",
+				"into": "Rust",
+				"chance": 0.1
+			}
+		]
+	},
+	{
+		"name": "Nitro",
+		"colour": [ 64, 128, 0 ],
+		"density": 0.2,
+		"viscosity": 0.4,
+		"temperature": 50,
+		"interactions": [
+			{
+				"with": "Fire",
+				"into": "Nitro Burning",
+				"chance": 1.0
+			},
+			{
+				"with": "Wood Burning",
+				"into": "Nitro Burning",
+				"chance": 1.0
+			},
+			{
+				"with": "Nitro Burning",
+				"into": "Nitro Burning",
+				"chance": 1.0
+			},
+			{
+				"with": "Torch",
+				"into": "Nitro Burning",
+				"chance": 1.0
+			}
+		]
+	},
+	{
+		"name": "Water",
+		"colour": [ 16, 96, 255 ],
+		"density": 0.76,
+		"viscosity": 0,
+		"temperature": 40,
+		"interactions": [
+			{
+				"with": "Fire",
+				"into": "Steam",
+				"chance": 0.5
+			},
+			{
+				"with": "Torch",
+				"into": "Steam",
+				"chance": 0.5
+			},
+			{
+				"with": "Wood Burning",
+				"into": "Steam",
+				"chance": 0.04
+			},
+			{
+				"with": "Nitro Burning",
+				"into": "Steam",
+				"chance": 1.0
+			},
+			{
+				"with": "Salt",
+				"into": "Saltwater",
+				"chance": 0.1
+			},
+			{
+				"with": "Ice",
+				"into": "Ice",
+				"chance": 0.2
+			}
+		]
+	},
+	{
+		"name": "Salt",
+		"colour": [ 200, 208, 216 ],
+		"density": 0.8,
+		"viscosity": 0.4,
+		"temperature": 40,
+		"interactions": [
+			{
+				"with": "Water",
+				"into": "Saltwater",
+				"chance": 0.75
+			},
+			{
+				"with": "Oil",
+				"into": "Salty Oil",
+				"chance": 0.4
+			}
+		]
+	},
+	{
+		"name": "Saltwater",
+		"colour": [ 109, 164, 224 ],
+		"density": 0.78,
+		"viscosity": 0.2,
+		"temperature": 40,
+		"interactions": [
+			{
+				"with": "Fire",
+				"into": "Steam",
+				"chance": 0.1
+			},
+			{
+				"with": "Fire",
+				"into": "Salt",
+				"chance": 0.1
+			},
+			{
+				"with": "Torch",
+				"into": "Steam",
+				"chance": 0.1
+			},
+			{
+				"with": "Wood Burning",
+				"into": "Salt",
+				"chance": 0.1
+			},
+			{
+				"with": "Wood Burning",
+				"into": "Steam",
+				"chance": 0.1
+			}
+		]
+	},
+	{
+		"name": "Ice",
+		"colour": [ 234, 247, 255 ],
+		"density": 1,
+		"viscosity": 0.4,
+		"temperature": 0,
+		"interactions": [
+			{
+				"with": "Fire",
+				"into": "Water",
+				"chance": 0.7
+			},
+			{
+				"with": "Water",
+				"into": "Water",
+				"chance": 0.04
+			},
+			{
+				"with": "Steam",
+				"into": "Water",
+				"chance": 0.2
+			},
+			{
+				"with": "Salt",
+				"into": "Water",
+				"chance": 0.03
+			},
+			{
+				"with": "Wood Burning",
+				"into": "Water",
+				"chance": 0.1
+			},
+			{
+				"with": "Nitro Burning",
+				"into": "Water",
+				"chance": 1
+			},
+			{
+				"with": "Firework Light",
+				"into": "Water",
+				"chance": 1
+			},
+			{
+				"with": "Firework Explosion",
+				"into": "Water",
+				"chance": 1
+			}
+		]
+	},
+	{
+		"name": "Oil",
+		"colour": [ 172, 20, 20 ],
+		"density": 0.8,
+		"viscosity": 0.04,
+		"temperature": 60,
+		"interactions": [
+			{
+				"with": "Salt",
+				"into": "Salty Oil",
+				"chance": 0.4
+			},
+			{
+				"with": "Fire",
+				"into": "Fire",
+				"chance": 0.7
+			},
+			{
+				"with": "Wood Burning",
+				"into": "Fire",
+				"chance": 0.7
+			},
+			{
+				"with": "Nitro Burning",
+				"into": "Fire",
+				"chance": 0.9
+			}
+		]
+	},
+	{
+		"name": "Salty Oil",
+		"colour": [ 150, 67, 67 ],
+		"density": 0.84,
+		"viscosity": 0.06,
+		"temperature": 50,
+		"interactions": [
+			{
+				"with": "Fire",
+				"into": "Fire",
+				"chance": 0.8
+			},
+			{
+				"with": "Fire",
+				"into": "Salt",
+				"chance": 0.2
+			},
+			{
+				"with": "Nitro Burning",
+				"into": "Fire",
+				"chance": 0.8
+			},
+			{
+				"with": "Nitro Burning",
+				"into": "Oil",
+				"chance": 0.8
+			},
+			{
+				"with": "Wood Burning",
+				"into": "Fire",
+				"chance": 0.8
+			},
+			{
+				"with": "Wood Burning",
+				"into": "Salt",
+				"chance": 0.1
+			},
+			{
+				"with": "Water",
+				"into": "Saltwater",
+				"chance": 0.4
+			},
+			{
+				"with": "Water",
+				"into": "Salt",
+				"chance": 0.4
+			}
+		]
+	},
+	{
+		"name": "Wood",
+		"colour": [ 141, 79, 22 ],
+		"density": 1,
+		"viscosity": 1,
+		"temperature": 30,
+		"interactions": [
+			{
+				"with": "Fire",
+				"into": "Wood Burning",
+				"chance": 0.4
+			},
+			{
+				"with": "Wood Burning",
+				"into": "Wood Burning",
+				"chance": 0.12
+			},
+			{
+				"with": "Nitro Burning",
+				"into": "Wood Burning",
+				"chance": 0.1
+			},
+			{
+				"with": "Firework Light",
+				"into": "Wood Burning",
+				"chance": 0.5
+			},
+			{
+				"with": "Firework Explosion",
+				"into": "Wood Burning",
+				"chance": 0.5
+			}
+		]
+	},
+	{
+		"name": "Gas",
+		"colour": [ 106, 234, 183 ],
+		"density": -0.2,
+		"viscosity": 0.3,
+		"temperature": 30,
+		"interactions": [
+			{
+				"with": "Fire",
+				"into": "Fire",
+				"chance": 0.9
+			},
+			{
+				"with": "Wood Burning",
+				"into": "Fire",
+				"chance": 0.7
+			},
+			{
+				"with": "Nitro Burning",
+				"into": "Fire",
+				"chance": 1.0
+			},
+			{
+				"with": "Firework Light",
+				"into": "Fire",
+				"chance": 1.0
+			},
+			{
+				"with": "Firework Explosion",
+				"into": "Fire",
+				"chance": 1.0
+			}
+		]
+	},
+	{
+		"name": "Fuse",
+		"colour": [ 157, 135, 60 ],
+		"density": 1,
+		"viscosity": 1,
+		"temperature": 30,
+		"interactions": [
+			{
+				"with": "Fire",
+				"into": "Fuse Burning",
+				"chance": 1.0
+			},
+			{
+				"with": "Fuse Burning",
+				"into": "Fuse Burning",
+				"chance": 1.0
+			},
+			{
+				"with": "Nitro Burning",
+				"into": "Fuse Burning",
+				"chance": 1.0
+			},
+			{
+				"with": "Firework Light",
+				"into": "Fuse Burning",
+				"chance": 1.0
+			},
+			{
+				"with": "Firework Explosion",
+				"into": "Fuse Burning",
+				"chance": 1.0
+			}
+		]
+	},
+	{
+		"name": "Torch",
+		"colour": [ 252, 176, 1 ],
+		"density": 1,
+		"viscosity": 1,
+		"temperature": 100,
+		"emit_element": "Fire",
+		"emit_chance": 0.2,
+		"interactions": [
+			{
+				"with": "Salty Oil",
+				"into": "Nothing",
+				"chance": 0.2
+			}
+		]
+	},
+	{
+		"name": "Firework",
+		"colour": [ 228, 124, 132 ],
+		"density": 0.6,
+		"viscosity": 0.1,
+		"temperature": 30,
+		"interactions": [
+			{
+				"with": "Fire",
+				"into": "Firework Light",
+				"chance": 1.0
+			},
+			{
+				"with": "Wood Burning",
+				"into": "Firework Light",
+				"chance": 1.0
+			},
+			{
+				"with": "Nitro Burning",
+				"into": "Firework Light",
+				"chance": 1.0
+			},
+			{
+				"with": "Torch",
+				"into": "Firework Light",
+				"chance": 1.0
+			}
+		]
+	},
+	{
+		"name": "Rust",
+		"colour": [ 216, 136, 16 ],
+		"drawable": false,
+		"density": 0.8,
+		"viscosity": 0.4,
+		"temperature": 30,
+		"interactions": [
+			{
+				"with": "Metal",
+				"into": "Metal",
+				"chance": 0.02
+			}
+		]
+	},
+	{
+		"name": "Firework Light",
+		"colour": [ 228, 124, 132 ],
+		"max_duration": 60,
+		"density": -9.0,
+		"viscosity": 0.9,
+		"temperature": 100,
+		"temperature_delta": -4,
+		"emit_chance": 0,
+		"emit_element": "Firework Explosion",
+		"interactions": [],
+		"drawable": false
+	},
+	{
+		"name": "Firework Explosion",
+		"colour": [ 255, 255, 0 ],
+		"max_duration": 80,
+		"density": 0.3,
+		"viscosity": 0.5,
+		"temperature": 800,
+		"temperature_delta": -10,
+		"interactions": [],
+		"drawable": false,
+		"emit_element": "Firework Explosion",
+		"emit_chance": 0.001
+	},
+	{
+		"name": "Nitro Burning",
+		"colour": [ 160, 160, 0 ],
+		"max_duration": 15,
+		"density": -0.3,
+		"viscosity": 0.1,
+		"temperature": 100,
+		"interactions": [
+			{
+				"with": "Ice",
+				"into": "Nitro",
+				"chance": 1
+			}
+		],
+		"drawable": false,
+		"emit_element": "Nitro Burning",
+		"emit_chance": 0.01
+	},
+	{
+		"name": "Fuse Burning",
+		"colour": [ 211, 151, 69 ],
+		"drawable": false,
+		"max_duration": 2,
+		"density": 1,
+		"viscosity": 1,
+		"temperature": 100,
+		"emit_element": "Fire",
+		"emit_chance": 0.6,
+		"interactions": []
+	},
+	{
+		"name": "Steam",
+		"colour": [ 96, 192, 255 ],
+		"max_duration": 240,
+		"density": -0.3,
+		"viscosity": 0.5,
+		"temperature": 100,
+		"interactions": [
+			{
+				"with": "Ice",
+				"into": "Water",
+				"chance": 0.1
+			}
+		],
+		"drawable": false,
+		"emit_element": "Water",
+		"emit_chance": 0
+	},
+	{
+		"name": "Wood Burning",
+		"colour": [ 235, 87, 37 ],
+		"max_duration": 150,
+		"density": 0.92,
+		"viscosity": 0.92,
+		"temperature": 100,
+		"interactions": [
+			{
+				"with": "Water",
+				"into": "Wood",
+				"chance": 0.3
+			},
+			{
+				"with": "Ice",
+				"into": "Wood",
+				"chance": 0.9
+			},
+			{
+				"with": "Nitro Burning",
+				"into": "Fire",
+				"chance": 1
+			}
+		],
+		"drawable": false,
+		"emit_element": "Fire",
+		"emit_chance": 0.05
+	},
+	{
+		"name": "Nothing",
+		"max_duration": 1,
+		"drawable": false,
+		"colour": [0,0,0],
+		"interactions": [],
+		"density": 1,
+		"viscosity": 1,
+		"temperature": 0
+	}
+]

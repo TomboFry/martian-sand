@@ -1,5 +1,6 @@
 mod cell;
 mod element;
+mod interaction;
 mod qtree;
 mod util;
 mod world;
